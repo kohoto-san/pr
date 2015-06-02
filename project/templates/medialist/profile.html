@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title></title>
+
+	{% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}" />
+
+
+</head>
+
+<body>
+
+	<div class="media_header">
+
+        <h3 class="title" style="font-size: 30px;"> {{user.first_name}} {{user.last_name}} </h2>
+    	
+    	<a href="http://twitter.com/{{user.socialaccount_set.all.0.extra_data.screen_name}}" target="_blank" class="user_twitter">
+        	<p> @{{user.socialaccount_set.all.0.extra_data.screen_name}} </p>
+    	</a>
+    </div>	
+
+    <div class="toggle_box" style="margin-top: 40px;">
+    	<div class="toggle">
+    	   <a href="#" id="media" class="active"> Media </a>
+    	   <a href="#" id="journalist"> Journalist </a>
+    	</div>
+    </div>
+
+
+    <div class="center_wrapper" style="width:40%;margin-top:50px;">
+    	
+    	<div id="media_section" style="display:block;">
+    		
+    		<ul>	
+
+    			{% for comment_media in comments_media %}
+
+    			<li> 
+    				<a href="{% url 'media:media_detail' comment_media.media.slug %}#comment_{{comment_media.id}}" class="user_profile_text"> {{comment_media.text}} </a>
+    				<a href="{% url 'media:media_detail' comment_media.media.slug %}" class="user_profile_media"> {{comment_media.media.name}} </a>
+    			</li>
+
+    			{% endfor %}
+
+    		</ul>
+
+    	</div>
+
+    	<div id="journalist_section" style="display:none;">
+    		
+    		<ul>	
+
+    			{% for comment_journalist in comments_journalist %}
+
+    			<li> 
+    				<a href="{% url 'media:journalist_detail' comment_journalist.journalist.media.slug comment_journalist.journalist.slug %}#comment_{{comment_journalist.id}}" class="user_profile_text"> 
+    					
+    					{{comment_journalist.text}} 
+    				
+    				</a>
+    				
+    				<a href="{% url 'media:journalist_detail' comment_journalist.journalist.media.slug comment_journalist.journalist.slug %}" class="user_profile_media"> 
+
+    					{{comment_journalist.journalist.name}} 
+    				
+    				</a>
+    			</li>
+
+    			{% endfor %}
+
+    		</ul>
+
+    	</div>
+
+
+    </div>
+
+    <style type="text/css">
+
+    	li{
+    		display: block;
+    		padding: 40px 0;
+    	}
+
+    	.user_profile_text{
+    		color: black;
+  			display: inline-block;
+  			width: 80%;
+    	}
+
+    	.user_profile_media{
+    		float: right;
+    		color: black;
+    		opacity: 0.6;
+    	}
+	
+		.user_twitter{
+			color:black;
+		}
+
+		.user_twitter p{
+			font-size: 20px;
+			 text-align: center;
+			opacity:0.5;
+		}
+
+		.user_twitter p:hover{
+			opacity: 1;
+		}
+
+
+    </style>
+
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+
+    <script type="text/javascript">
+
+        $('.toggle a').click(function() {
+
+            $(this).addClass('active');
+            $(this).siblings().removeClass('active');
+
+            id = $(this).attr('id');
+            id = id + '_section';
+
+            id2 = $(this).siblings().attr('id');
+            id2 = id2 + '_section';
+
+            $('#' + id).css('display', 'block');
+            $('#' + id2).css('display', 'none');
+        });
+
+    </script>
+
+
+
+</body>
+</html>

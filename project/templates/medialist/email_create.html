@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title></title>
+
+    {% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}" />
+
+</head>
+
+<body>
+
+    <div class="media_header">
+        <a href="{% url 'media:media_detail' media.slug %}"> 
+            <h2 class="title"> {{media.name }} </h2>
+        </a>
+
+        {% comment %}
+            <h3 class="name"> {{field}} </h3>
+        {% endcomment %}
+    </div>
+
+
+    <div class="center_wrapper" style="width: 30%;text-align: left;">
+
+        <form action="" method="post">
+        {% csrf_token %}
+
+            <ul style="padding:0;">
+
+                <li class="media_create_element">
+                    {{ form.email.errors }}
+                    {{ form.email.label_tag }} {{ form.email }}
+                </li>
+
+            </ul>
+
+            <input type="submit" value="Submit"  class="comment_submit" style="width: 250px;margin-left: 30px;" />
+
+        </form>
+
+    </div>
+
+
+</body>
+</html>

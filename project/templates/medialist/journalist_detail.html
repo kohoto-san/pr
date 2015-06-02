@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>{{journalist.name}} | PRList.co</title>
+
+    {% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}" />
+
+    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,500,700|Roboto:500,300,700,400' rel='stylesheet' type='text/css'>
+
+</head>
+
+<body>
+
+     <div class="header_site">
+        <a href="/"> PRList.co </a>
+    </div>
+
+	<div class="media_header">
+    	<a href="{% url 'media:media_detail' journalist.media.slug %}"> 
+            <h2 class="title"> {{journalist.media.name }} </h2>
+        </a>
+    	
+        <h3 class="name"> {{journalist.name}} </h3>
+    </div>
+
+    <div class="center_wrapper" style="width:80%;">
+
+        <ul class="about_media_list">
+
+            <li class="about_media_list_element element_bg"> 
+                
+                {% if journalist.link_to_twitter != 'None' %}
+
+                    <a href="{{journalist.link_to_twitter}}" class="first_element" target="_blank"> 
+                        <p style="margin-right:0;"> Twitter </p> 
+                        <img src="{% static 'img/open_link.png' %}" style="width: 12px;opacity: 0.6;" />
+                    </a>
+
+                {% else %}
+
+                    <p class="first_element"> Twitter </p> 
+
+                {% endif %}
+
+                <div class="about_media_right_element">
+
+                    {% if journalist.amount_twitter_followers != 'None' %}
+                        <p class="second_element"> {{journalist.amount_twitter_followers}} Followers  </p>
+                    {% else %}
+                        <p class="second_element"> None </p>
+                    {% endif %}
+                        
+                    <a href="{% url 'media:journalist_update' journalist.media.slug journalist.slug 'amount_twitter_followers' %}">
+                        <img src="{% static 'img/edit.png' %}" />
+                    </a>
+                </div>
+
+            </li>
+
+            <li class="about_media_list_element"> 
+
+                {% if journalist.link_to_linkedin != 'None' %}
+
+                    <a href="{{journalist.link_to_linkedin}}" class="first_element" target="_blank"> 
+                        <p style="margin-right:0;"> LinkedIn </p> 
+                        <img src="{% static 'img/open_link.png' %}" style="width: 12px;opacity: 0.6;" />
+                    </a>
+
+                {% else %}
+
+                    <p class="first_element"> LinkedIn </p> 
+
+                {% endif %}
+
+                <div class="about_media_right_element">
+
+                    {% if journalist.link_to_linkedin != 'None' %}
+                        <p class="second_element"> </p>
+                    {% else %}
+                        <p class="second_element"> None </p>
+                    {% endif %}
+                        
+                    <a href="{% url 'media:journalist_update' journalist.media.slug journalist.slug 'link_to_linkedin' %}">
+                        <img src="{% static 'img/edit.png' %}" />
+                    </a>
+                </div>
+
+            </li>
+
+            <li class="about_media_list_element"> 
+                
+                <p class="first_element"> Activity </p>
+
+                <div class="about_media_right_element">
+                    <p class="second_element"> {{journalist.activity}} </p>
+                        
+                    <a href="{% url 'media:journalist_update' journalist.media.slug journalist.slug 'activity' %}">
+                        <img src="{% static 'img/edit.png' %}" />
+                    </a>
+                </div>
+
+             </li>
+
+            <li class="about_media_list_element element_bg"> 
+
+                <p class="first_element"> Categories </p>
+
+                <div class="about_media_right_element">
+                    <p class="second_element"> {{journalist.categories}} </p>
+                        
+                    <a href="{% url 'media:journalist_update' journalist.media.slug journalist.slug 'categories' %}">
+                        <img src="{% static 'img/edit.png' %}" />
+                    </a>
+                </div>
+
+            </li>
+
+            <li class="about_media_list_element element_bg"> 
+                
+                <p class="first_element"> Email </p>
+
+                <div class="about_media_right_element">
+                    <p class="second_element"> {{journalist.email}} </p>
+                        
+                    <a href="{% url 'media:journalist_update' journalist.media.slug journalist.slug 'email' %}">
+                        <img src="{% static 'img/edit.png' %}" />
+                    </a>
+                </div>
+
+            </li>
+                
+        </ul>
+
+    </div>
+
+
+    <div class="center_wrapper" style="border-bottom: 1px solid #e4e2e2;">
+
+        <a href="{% url 'media:journalist_article_create' journalist.media.slug journalist.slug %}" class="comment_submit comment_submit_active" style="float: right;padding: 15px 20px;margin:0;">
+            Add a article
+        </a>   
+
+        <ul style="padding-top:65px;">
+            {% for article in articles %}
+
+            <li class="journalists_list_element"> 
+                <a href="{{article.link}}" style="display:block;" target="_blank"> {{article.title}} </a>
+            </li>
+
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="center_wrapper" style="max-width: 650px;">
+
+            {% for comment in comments %}
+            <div class="comment" id="comment_{{comment.id}}">
+                <img src="{{comment.author.socialaccount_set.all.0.extra_data.profile_image_url}}" />
+                <!-- 
+                    <p class="time_create"> Mi S.</p>
+                -->
+
+
+                <div class="header">
+                    <p class="name">{{comment.author.first_name}} {{comment.author.last_name}}</p>
+                    
+                    <a href="https://twitter.com/intent/tweet?source=http://prlist.co&text=@{{comment.author.socialaccount_set.all.0.extra_data.screen_name}}'s thoughts on {{journalist.name}}&url=http://localhost:8000{% url 'media:journalist_detail' journalist.media.slug journalist.slug %}%23comment_{{comment.id}}" class="comment_share" target="_blank"> 
+                        <img src="{% static 'img/share.png' %}" />
+                        <p> Share </p> 
+                    </a>
+                </div>
+
+                <p class="text">
+                    {{comment.text}}
+                </p>
+
+            </div>
+            {% endfor %}
+
+
+            <form action="" method="post" style="margin-top: 120px;" class="comment">
+            {% csrf_token %}
+
+                {% if request.user.is_authenticated %}
+
+                    {{ form.text.errors }}
+
+                    <img src="{{request.user.socialaccount_set.all.0.extra_data.profile_image_url}}" />
+                
+                    <p class="text">
+                        {{form.text}}
+                        <input type="submit" value="Submit" class="comment_submit comment_submit_active" />
+                    </p>
+
+                {% else %}
+
+                    <img src="{% static 'img/anonim_user.png' %}" />
+                
+                    <p class="text disabled_input_text">
+
+                        <textarea placeholder="You must be logged in to leave a comment." cols="40" id="id_text" name="text" rows="10" disabled="disabled"></textarea>
+
+                        <input type="submit" value="Submit" class="comment_submit" style="opacity: 0.5;" />
+
+                        <a href="/accounts/twitter/login/?process=login" class="comment_submit comment_submit_active"> Log In </a>
+                    </p>
+
+                {% endif %}
+
+
+            </form>
+
+        </div> <!-- end center_wrapper for comments-->
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-63672129-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+</body>
+</html>

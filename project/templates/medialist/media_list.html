@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>PRList.co</title>
+
+    {% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}" />
+
+    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,500,700|Roboto:500,300,700,400' rel='stylesheet' type='text/css'>
+
+</head>
+
+<body>
+
+	<div class="header_site">
+
+		<a href="/"> PRList.co </a>
+
+		<a href="/media/new" style="float: right;"> Add a Media </a>
+
+		{% comment %}
+			<a href="{% url 'media:profile' request.user.socialaccount_set.all.0.extra_data.screen_name %}">
+				<img style="float:right;height: 44px;width: 44px;border-radius:50%;border: none" src="{{request.user.socialaccount_set.all.0.extra_data.profile_image_url}}" />
+			</a>
+		{% endcomment %}
+		
+
+	</div>
+
+	<div class="main">
+
+	    <div class="list_sites">
+
+	     	{% for media in object_list %}
+	     	<a href="{{media.slug}}" class="list_sites_element">
+
+	     		<div class="title_box">
+
+	     	    	<h2 class="title"> {{media.name}} </h2>
+
+	     	    	<div class="element_platform_list">
+	     	    		{% if "ios" in media.platforms %}     
+	     	    			<img src="{% static 'img/ios.png' %}" /> 
+	     	    		{% endif %}
+
+	     	    		{% if "android" in media.platforms %} 
+	     	    			<img src="{% static 'img/android.png' %}" />  
+	     	    		{% endif %}
+	     	    		
+	     	    		{% if "web" in media.platforms %}     
+	     	    			<img src="{% static 'img/web.png' %}" style="width: 30px; height: 10px" />   
+	     	    		{% endif %}
+
+	     	    		{% comment %}
+	     	    		Вообще вверхний код заменить на этот, когда сделаю нормальную картинку web'а
+
+	     	    		{% for platform in media.platforms_as_list %}
+	     	    			{% with 'img/'|add:platform|add:'.png' as platform_img %}
+  								<img src="{% static platform_img %}" />
+							{% endwith %}
+	     	    		{% endfor %}
+
+	     	    		{% endcomment %}
+
+	     	    	</div>
+
+	     	    </div>
+
+	     	    <p class="amount_journalists right_float"> Journalists: {{media.amount_journalists}}  </p>
+	     	    <p class="element_languages right_float">  {{media.language}} </p>
+	     	    <p class="alexa right_float"> Alexa Rank: {{media.alexa_rank}}</p>
+
+	     	    <div class="tags right_float">               
+	     	        {{media.categories}}
+	     	    </div>
+
+	     	</a>
+
+	     	{% endfor %}
+	     		    	
+	    </div>
+		
+
+	</div>
+
+	<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-63672129-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>
+
